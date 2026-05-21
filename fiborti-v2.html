@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fiborti – 10, 20 o 30 Clientes Nuevos Cada Mes. Garantizado.</title>
+  <meta name="description" content="El sistema que llena tu agenda de clientes cualificados en 90 días o te devolvemos el dinero. Sin perseguir a nadie, sin publicar contenido a diario." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:    #06060A;
+      --dark2:   #0D0D16;
+      --dark3:   #141420;
+      --p1:      #FF5200;
+      --p2:      #FF8800;
+      --gold:    #FFB800;
+      --green:   #00C67F;
+      --red:     #FF3B30;
+      --card:    rgba(255,255,255,0.04);
+      --cb:      rgba(255,255,255,0.07);
+      --text:    #FAFAFA;
+      --muted:   rgba(250,250,250,0.52);
+      --r:       14px;
+      --r-lg:    22px;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--dark); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── UTILS ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,82,0,0.12); border: 1px solid rgba(255,82,0,0.3);
+      color: #FF9F6B; font-size: 11px; font-weight: 800; letter-spacing: 1.8px;
+      text-transform: uppercase; padding: 5px 14px; border-radius: 100px;
+    }
+    .tag-green {
+      background: rgba(0,198,127,0.1); border-color: rgba(0,198,127,0.25); color: #00C67F;
+    }
+    .tag-gold {
+      background: rgba(255,184,0,0.1); border-color: rgba(255,184,0,0.25); color: var(--gold);
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      font-size: 15px; font-weight: 800; padding: 15px 30px; border-radius: 100px;
+      cursor: pointer; transition: transform .18s, box-shadow .18s; border: none;
+      white-space: nowrap; letter-spacing: 0.2px;
+    }
+    .btn:hover { transform: translateY(-3px); }
+    .btn-fire {
+      background: linear-gradient(135deg, var(--p1) 0%, var(--p2) 100%);
+      color: #fff; box-shadow: 0 8px 30px rgba(255,82,0,0.45);
+    }
+    .btn-fire:hover { box-shadow: 0 14px 44px rgba(255,136,0,0.6); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, #FF8800 100%);
+      color: #07060A; box-shadow: 0 8px 30px rgba(255,184,0,0.35);
+    }
+    .btn-gold:hover { box-shadow: 0 14px 44px rgba(255,184,0,0.55); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1); color: var(--text);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+    .btn-lg { font-size: 17px; padding: 19px 40px; }
+    .btn-xl { font-size: 19px; padding: 22px 48px; border-radius: 100px; }
+
+    /* ── BLOBS ── */
+    .blob { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+
+    /* ── URGENCY BAR ── */
+    #urgency-bar {
+      background: linear-gradient(90deg, var(--p1), var(--p2), var(--gold));
+      padding: 10px 24px; text-align: center;
+      font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.3px;
+    }
+    #urgency-bar span { opacity: 0.8; margin: 0 6px; }
+    .blink { animation: blink 1.2s step-start infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      padding: 14px 24px;
+      background: rgba(6,6,10,0.88); backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #fff 30%, var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      padding: 90px 0 80px;
+      position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255,82,0,0.1) 0%, transparent 65%);
+    }
+    #hero .container { position: relative; z-index: 1; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center;
+    }
+    .hero-eyebrow { margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .hero-h1 {
+      font-size: clamp(36px, 5.5vw, 64px);
+      font-weight: 900; line-height: 1.06;
+      letter-spacing: -2px; margin-bottom: 22px;
+    }
+    .fire-text {
+      background: linear-gradient(90deg, var(--p1) 0%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--muted); line-height: 1.8;
+      max-width: 500px; margin-bottom: 14px;
+    }
+    .hero-bold-claim {
+      font-size: 15px; font-weight: 700;
+      background: rgba(255,184,0,0.08); border: 1px solid rgba(255,184,0,0.2);
+      color: var(--gold); padding: 12px 18px; border-radius: var(--r);
+      margin-bottom: 32px; display: inline-block; line-height: 1.5;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-micro {
+      font-size: 12px; color: var(--muted);
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .hero-micro span { display: flex; align-items: center; gap: 5px; }
+    .hero-micro .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; }
+
+    /* Video */
+    .video-wrap {
+      border-radius: var(--r-lg); overflow: hidden;
+      border: 1px solid rgba(255,82,0,0.2);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03);
+      background: var(--dark2); position: relative;
+    }
+    .video-thumb {
+      width: 100%; aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #100C0A 0%, #1A1008 50%, #12080A 100%);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; position: relative;
+    }
+    .video-thumb iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: none;
+    }
+    .play-ring {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--p1), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 12px rgba(255,82,0,0.12), 0 8px 40px rgba(255,82,0,0.5);
+      cursor: pointer; transition: transform .2s;
+      animation: ring-pulse 2s ease-in-out infinite;
+    }
+    .play-ring:hover { transform: scale(1.1); }
+    @keyframes ring-pulse {
+      0%,100% { box-shadow: 0 0 0 12px rgba(255,82,0,0.12), 0 8px 40px rgba(255,82,0,0.5); }
+      50%      { box-shadow: 0 0 0 20px rgba(255,82,0,0.06), 0 12px 50px rgba(255,136,0,0.6); }
+    }
+    .video-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 14px 18px;
+      background: linear-gradient(to top, rgba(6,6,10,.95), transparent);
+      font-size: 13px; color: rgba(250,250,250,0.65); font-weight: 600;
+    }
+
+    /* Stats bar */
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      margin-top: 18px;
+      background: var(--dark2); border-radius: var(--r);
+      border: 1px solid var(--cb); overflow: hidden;
+    }
+    .hstat {
+      padding: 18px 12px; text-align: center;
+      border-right: 1px solid var(--cb);
+    }
+    .hstat:last-child { border-right: none; }
+    .hstat-n {
+      font-size: 30px; font-weight: 900; letter-spacing: -1px;
+      background: linear-gradient(90deg, var(--p2), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hstat-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+
+    /* ── LOGOS / TRUST ── */
+    #trust { padding: 28px 0; background: var(--dark2); border-top: 1px solid var(--cb); border-bottom: 1px solid var(--cb); }
+    .trust-inner { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+    .trust-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-right: 32px; white-space: nowrap; }
+    .trust-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .trust-chip {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(250,250,250,0.55); font-size: 13px; font-weight: 600;
+      padding: 7px 18px; border-radius: 100px;
+    }
+
+    /* ── PAIN / PROBLEM ── */
+    #pain {
+      padding: 96px 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,59,48,0.06) 0%, transparent 70%);
+    }
+    .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .pain-list { display: flex; flex-direction: column; gap: 14px; }
+    .pain-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: rgba(255,59,48,0.06); border: 1px solid rgba(255,59,48,0.14);
+      border-radius: var(--r); padding: 18px;
+    }
+    .pain-x { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,59,48,0.15); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; color: var(--red); font-weight: 800; }
+    .pain-text { font-size: 14px; line-height: 1.65; color: rgba(250,250,250,0.75); }
+    .pain-text strong { color: var(--text); }
+    .pain-vs {
+      background: var(--dark2); border: 1px solid var(--cb);
+      border-radius: var(--r-lg); padding: 36px; display: flex; flex-direction: column; gap: 0;
+    }
+    .vs-row {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 16px; align-items: center;
+      padding: 14px 0; border-bottom: 1px solid var(--cb);
+      font-size: 14px;
+    }
+    .vs-row:last-child { border-bottom: none; }
+    .vs-bad { color: rgba(250,250,250,0.45); }
+    .vs-good { color: #fff; font-weight: 600; }
+    .vs-sep { background: linear-gradient(135deg,var(--p1),var(--gold)); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 100px; white-space: nowrap; text-align: center; }
+
+    /* ── SECTION HEADS ── */
+    .sh { text-align: center; margin-bottom: 56px; }
+    .sh h2 {
+      font-size: clamp(30px, 4.5vw, 52px);
+      font-weight: 900; letter-spacing: -1.5px; margin: 14px 0 16px; line-height: 1.1;
+    }
+    .sh p { font-size: 17px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.75; }
+
+    /* ── HOW ── */
+    #how {
+      padding: 96px 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,82,0,0.07) 0%, transparent 65%);
+    }
+    .how-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: var(--cb); border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--cb); }
+    .how-card { background: var(--dark2); padding: 38px 30px; display: flex; flex-direction: column; gap: 16px; }
+    .how-n { font-size: 48px; font-weight: 900; letter-spacing: -2px; line-height: 1;
+      background: linear-gradient(135deg, var(--p1), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .how-card h3 { font-size: 20px; font-weight: 800; line-height: 1.3; }
+    .how-card p { font-size: 14px; color: var(--muted); line-height: 1.75; }
+    .how-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .how-bullets li { font-size: 13px; color: var(--muted); display: flex; gap: 8px; }
+    .how-bullets li::before { content: '→'; color: var(--p2); flex-shrink: 0; }
+
+    /* ── CTA STRIP ── */
+    .cta-strip {
+      padding: 44px 0;
+      background: linear-gradient(135deg, rgba(255,82,0,0.1), rgba(255,184,0,0.06));
+      border-top: 1px solid rgba(255,82,0,0.18);
+      border-bottom: 1px solid rgba(255,82,0,0.18);
+      text-align: center;
+    }
+    .strip-inner { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+    .strip-inner p { font-size: 18px; font-weight: 700; }
+    .strip-inner p em { font-style: normal; color: var(--gold); }
+
+    /* ── BENEFITS ── */
+    #benefits { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .benefits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .bc {
+      background: var(--card); border: 1px solid var(--cb);
+      border-radius: var(--r-lg); padding: 30px 26px;
+      transition: border-color .2s, transform .2s; position: relative; overflow: hidden;
+    }
+    .bc::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 0% 0%, rgba(255,82,0,0.07) 0%, transparent 60%);
+    }
+    .bc:hover { border-color: rgba(255,82,0,0.35); transform: translateY(-4px); }
+    .bc-icon { font-size: 30px; margin-bottom: 16px; }
+    .bc h3 { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+    .bc p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── PROOF CARDS ── */
+    #proof-cards { padding: 0 0 96px; }
+    .pc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .pc {
+      background: var(--card); border: 1px solid var(--cb);
+      border-radius: var(--r-lg); padding: 26px;
+    }
+    .stars-fire { color: var(--gold); font-size: 14px; margin-bottom: 12px; }
+    .pc-q { font-size: 15px; line-height: 1.75; color: rgba(250,250,250,0.85); font-style: italic; margin-bottom: 16px; }
+    .pc-author { display: flex; align-items: center; gap: 11px; }
+    .pc-av {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--p1), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: #fff;
+    }
+    .pc-name { font-size: 14px; font-weight: 700; }
+    .pc-role { font-size: 12px; color: var(--muted); }
+
+    /* ── APPLY (what we implement) ── */
+    #apply { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .apply-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .apply-items { display: flex; flex-direction: column; gap: 14px; }
+    .ai {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--cb);
+      border-radius: var(--r); padding: 18px;
+      transition: border-color .2s, transform .2s;
+    }
+    .ai:hover { border-color: rgba(255,82,0,0.3); transform: translateX(5px); }
+    .ai-ico {
+      width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--p1), var(--p2));
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .ai-t h4 { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+    .ai-t p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .apply-visual { background: var(--dark2); border: 1px solid var(--cb); border-radius: var(--r-lg); padding: 32px; }
+    .av-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .av-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .funnel-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .fn {
+      padding: 13px 18px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 14px; font-weight: 600;
+    }
+    .fn1 { background: rgba(255,82,0,0.2); border: 1px solid rgba(255,82,0,0.25); width: 100%; }
+    .fn2 { background: rgba(255,82,0,0.15); border: 1px solid rgba(255,82,0,0.18); width: 86%; margin: 0 auto; }
+    .fn3 { background: rgba(255,184,0,0.12); border: 1px solid rgba(255,184,0,0.2); width: 70%; margin: 0 auto; }
+    .fn4 { background: linear-gradient(135deg,rgba(255,82,0,0.22),rgba(255,184,0,0.15)); border: 1px solid rgba(255,184,0,0.28); width: 54%; margin: 0 auto; }
+    .fn-pct { font-size: 12px; color: var(--muted); }
+    .funnel-example {
+      margin-top: 22px; padding: 18px;
+      background: rgba(255,184,0,0.07); border: 1px solid rgba(255,184,0,0.18);
+      border-radius: var(--r);
+    }
+    .fe-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .fe-num { font-size: 26px; font-weight: 900; letter-spacing: -1px; color: #fff; }
+    .fe-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .fe-sub strong { color: var(--gold); }
+
+    /* ── CASES ── */
+    #cases { padding: 96px 0; background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(255,184,0,0.06) 0%, transparent 70%); border-top: 1px solid rgba(255,255,255,0.05); }
+    .cases-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .cc {
+      background: var(--dark2); border: 1px solid var(--cb);
+      border-radius: var(--r-lg); overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+    .cc:hover { transform: translateY(-4px); border-color: rgba(255,82,0,0.3); }
+    .cc-thumb {
+      height: 180px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 6px;
+      background: linear-gradient(135deg, #120E07, #1C1205);
+      border-bottom: 1px solid var(--cb); position: relative; overflow: hidden;
+    }
+    .cc-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,82,0,0.08), rgba(255,184,0,0.07)); }
+    .cc-result {
+      font-size: 38px; font-weight: 900; letter-spacing: -1.5px; color: #fff; position: relative; z-index: 1;
+      background: linear-gradient(90deg, var(--p2), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .cc-metric { font-size: 12px; color: var(--muted); position: relative; z-index: 1; }
+    .cc-body { padding: 22px; }
+    .cc-niche { font-size: 10px; font-weight: 800; letter-spacing: 1.8px; text-transform: uppercase; color: var(--p2); margin-bottom: 8px; }
+    .cc-body h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; line-height: 1.35; }
+    .cc-body p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .t-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .tc {
+      background: var(--card); border: 1px solid var(--cb);
+      border-radius: var(--r-lg); padding: 30px;
+    }
+    .tc.hero-t {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(255,82,0,0.08), rgba(255,184,0,0.04));
+      border-color: rgba(255,82,0,0.25);
+    }
+    .tc-q { font-size: 36px; line-height: 1; color: var(--p1); opacity: 0.4; margin-bottom: 14px; }
+    .tc-text { font-size: 15px; line-height: 1.8; color: rgba(250,250,250,0.88); margin-bottom: 22px; }
+    .tc.hero-t .tc-text { font-size: 17px; }
+    .tc-author { display: flex; align-items: center; gap: 12px; }
+    .tc-av {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--p1), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 800; color: #fff;
+    }
+    .tc-name { font-size: 14px; font-weight: 800; }
+    .tc-role { font-size: 12px; color: var(--muted); }
+    .tc-badge {
+      margin-left: auto; flex-shrink: 0;
+      background: rgba(0,198,127,0.1); border: 1px solid rgba(0,198,127,0.22);
+      color: var(--green); font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 100px;
+    }
+
+    /* ── COMPARISON TABLE ── */
+    #comparison { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); background: var(--dark2); }
+    .comp-table { width: 100%; border-collapse: collapse; border-radius: var(--r-lg); overflow: hidden; }
+    .comp-table th {
+      padding: 18px 24px; font-size: 14px; font-weight: 800; text-align: left;
+      background: var(--dark3);
+    }
+    .comp-table th:nth-child(2) { background: linear-gradient(135deg, rgba(255,82,0,0.2), rgba(255,184,0,0.12)); color: var(--gold); text-align: center; }
+    .comp-table th:nth-child(3) { text-align: center; color: var(--muted); }
+    .comp-table td {
+      padding: 16px 24px; font-size: 14px;
+      border-bottom: 1px solid var(--cb);
+      background: var(--dark2);
+    }
+    .comp-table td:nth-child(2) {
+      background: rgba(255,82,0,0.04); text-align: center;
+      font-weight: 700; color: var(--green);
+      border-left: 1px solid rgba(255,82,0,0.15);
+      border-right: 1px solid rgba(255,82,0,0.15);
+    }
+    .comp-table td:nth-child(3) { text-align: center; color: var(--red); }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .chk { font-size: 16px; }
+
+    /* ── 90-DAY ROADMAP ── */
+    #roadmap { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .roadmap { display: flex; flex-direction: column; gap: 0; position: relative; }
+    .roadmap::before {
+      content: ''; position: absolute; left: 23px; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(to bottom, var(--p1), var(--gold));
+    }
+    .rm-item { display: flex; gap: 24px; padding-bottom: 36px; align-items: flex-start; position: relative; }
+    .rm-item:last-child { padding-bottom: 0; }
+    .rm-dot {
+      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--p1), var(--p2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #fff;
+      box-shadow: 0 0 0 4px rgba(255,82,0,0.15);
+      z-index: 1;
+    }
+    .rm-content { padding-top: 10px; }
+    .rm-week { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p2); margin-bottom: 6px; }
+    .rm-content h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .rm-content p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── DELIVERABLES ── */
+    #deliverables { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); background: radial-gradient(ellipse 70% 50% at 30% 50%, rgba(255,82,0,0.07) 0%, transparent 70%); }
+    .del-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .di {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--cb);
+      border-radius: var(--r); padding: 20px;
+      transition: border-color .2s, transform .2s;
+    }
+    .di:hover { border-color: rgba(255,82,0,0.3); transform: translateX(4px); }
+    .di-chk {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--p1), var(--gold));
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .di-t h4 { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+    .di-t p { font-size: 13px; color: var(--muted); }
+
+    /* ── GUARANTEE ── */
+    #guarantee {
+      padding: 80px 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: linear-gradient(135deg, rgba(0,198,127,0.06), rgba(255,184,0,0.03));
+    }
+    .guarantee-box {
+      background: var(--dark2); border: 2px solid rgba(0,198,127,0.25);
+      border-radius: var(--r-lg); padding: 48px;
+      display: grid; grid-template-columns: auto 1fr; gap: 36px; align-items: center;
+    }
+    .guarantee-seal {
+      width: 120px; height: 120px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(0,198,127,0.15), rgba(0,198,127,0.06));
+      border: 2px solid rgba(0,198,127,0.3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    }
+    .guarantee-seal .seal-icon { font-size: 36px; }
+    .guarantee-seal .seal-text { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--green); text-align: center; line-height: 1.3; }
+    .guarantee-content h3 { font-size: 26px; font-weight: 900; margin-bottom: 14px; }
+    .guarantee-content p { font-size: 15px; color: var(--muted); line-height: 1.75; }
+    .guarantee-content strong { color: var(--text); }
+
+    /* ── FAQ ── */
+    #faq { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .faq-item {
+      background: var(--card); border: 1px solid var(--cb);
+      border-radius: var(--r); overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      font-size: 15px; font-weight: 700; color: var(--text);
+      background: none; border: none; cursor: pointer; text-align: left;
+    }
+    .faq-arrow { font-size: 18px; color: var(--p2); transition: transform .25s; flex-shrink: 0; }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+    .faq-a {
+      font-size: 14px; color: var(--muted); line-height: 1.75;
+      padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .25s;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 0 24px 20px; }
+
+    /* ── NOT FOR YOU ── */
+    #not-for-you { padding: 80px 0; border-top: 1px solid rgba(255,255,255,0.05); background: var(--dark2); }
+    .nfy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .nfy-col { background: var(--dark3); border-radius: var(--r-lg); padding: 32px; }
+    .nfy-col.bad { border: 1px solid rgba(255,59,48,0.2); }
+    .nfy-col.good { border: 1px solid rgba(0,198,127,0.2); }
+    .nfy-col h3 { font-size: 17px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .nfy-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .nfy-list li { font-size: 14px; color: var(--muted); display: flex; gap: 10px; line-height: 1.6; }
+    .nfy-list li .mk { flex-shrink: 0; font-weight: 800; }
+    .nfy-col.bad .mk { color: var(--red); }
+    .nfy-col.good .mk { color: var(--green); }
+
+    /* ── FINAL CTA ── */
+    #final {
+      padding: 100px 0;
+      text-align: center; position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(255,82,0,0.12) 0%, transparent 70%);
+    }
+    #final .container { position: relative; z-index: 1; }
+    .final-h { font-size: clamp(34px,5vw,62px); font-weight: 900; letter-spacing: -2px; margin: 16px 0 18px; line-height: 1.05; }
+    .final-sub { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 auto 40px; line-height: 1.75; }
+    .final-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .final-micro { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 22px; font-size: 13px; color: var(--muted); }
+    .final-micro span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── FOOTER ── */
+    footer { padding: 40px 0; border-top: 1px solid var(--cb); text-align: center; }
+    .f-logo { font-size: 20px; font-weight: 900; background: linear-gradient(90deg,#fff 30%,var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; display: inline-block; }
+    footer p { font-size: 13px; color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes cta-pulse {
+      0%,100% { box-shadow: 0 8px 30px rgba(255,82,0,0.45); }
+      50%      { box-shadow: 0 12px 44px rgba(255,136,0,0.65); }
+    }
+    .btn-fire { animation: cta-pulse 3s ease-in-out infinite; }
+    .video-wrap { animation: float 7s ease-in-out infinite; }
+
+    /* ── REVEAL ── */
+    .rv { opacity:0; transform:translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .rv.in { opacity:1; transform:none; }
+    .rv1{transition-delay:.1s} .rv2{transition-delay:.2s} .rv3{transition-delay:.3s}
+    .rv4{transition-delay:.4s} .rv5{transition-delay:.5s}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:960px){
+      .hero-grid,.pain-grid,.apply-grid,.guarantee-box,.nfy-grid{grid-template-columns:1fr;gap:36px}
+      .how-cards{grid-template-columns:1fr}
+      .benefits-grid,.pc-grid,.cases-grid{grid-template-columns:1fr 1fr}
+      .t-grid,.faq-grid,.del-grid{grid-template-columns:1fr}
+      .tc.hero-t{grid-column:span 1}
+      .comp-table{font-size:13px}
+      .video-wrap{animation:none}
+      .roadmap::before{left:23px}
+    }
+    @media(max-width:600px){
+      .benefits-grid,.pc-grid,.cases-grid{grid-template-columns:1fr}
+      nav .btn{display:none}
+      .hero-h1{letter-spacing:-1px}
+      .comp-table th:nth-child(3),.comp-table td:nth-child(3){display:none}
+      .guarantee-box{grid-template-columns:1fr;text-align:center}
+      .guarantee-seal{margin:0 auto}
+    }
+  </style>
+</head>
+<body>
+
+<!-- URGENCY BAR -->
+<div id="urgency-bar">
+  <span class="blink">🔴</span> Solo quedan <strong>3 plazas</strong> disponibles este mes — se cierran el viernes.
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">fiborti.</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="#faq" class="btn btn-ghost" style="padding:10px 20px;font-size:14px">Ver FAQ</a>
+    <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire" style="padding:11px 22px;font-size:14px">
+      Agenda tu llamada →
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="blob" style="width:700px;height:700px;background:rgba(255,82,0,0.1);top:-300px;left:-200px"></div>
+  <div class="blob" style="width:500px;height:500px;background:rgba(255,184,0,0.07);top:-100px;right:-200px"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow rv">
+          <span class="tag">Sistema probado</span>
+          <span class="tag tag-green">+80 negocios transformados</span>
+        </div>
+        <h1 class="hero-h1 rv rv1">
+          Consigue <span class="fire-text">10, 20 o 30<br/>clientes nuevos</span><br/>
+          cada mes —en piloto<br/>automático
+        </h1>
+        <p class="hero-sub rv rv2">
+          El sistema que usamos para que coaches, consultores y agencias llenen su agenda de clientes cualificados sin perseguir a nadie, sin depender del boca a boca y sin publicar contenido a diario.
+        </p>
+        <div class="hero-bold-claim rv rv3">
+          ⚡ Resultados visibles en los primeros 30 días — o seguimos trabajando <strong>gratis</strong> hasta conseguirlos.
+        </div>
+        <div class="hero-actions rv rv3">
+          <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Quiero mi agenda llena ahora →
+          </a>
+          <a href="#how" class="btn btn-ghost btn-lg">Ver cómo funciona</a>
+        </div>
+        <div class="hero-micro rv rv4">
+          <span><span class="dot"></span> Llamada 100% gratuita</span>
+          <span>⏱ Solo 30 minutos</span>
+          <span>🔒 Sin compromiso</span>
+        </div>
+      </div>
+      <div>
+        <div class="video-wrap rv rv2">
+          <div class="video-thumb" id="videoThumb">
+            <iframe id="ytIframe"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&rel=0&modestbranding=1"
+              title="Fiborti — Cómo funciona"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+            <div class="play-ring" id="playBtn">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="video-caption">▶ Mira cómo funciona el sistema — 4 min</div>
+          </div>
+        </div>
+        <div class="hero-stats rv rv3">
+          <div class="hstat"><div class="hstat-n">90d</div><div class="hstat-l">Resultados garantizados</div></div>
+          <div class="hstat"><div class="hstat-n">3x</div><div class="hstat-l">ROI promedio</div></div>
+          <div class="hstat"><div class="hstat-n">80+</div><div class="hstat-l">Clientes activos</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST / NICHE -->
+<section id="trust">
+  <div class="container">
+    <div class="trust-inner">
+      <span class="trust-label">Trabajamos con →</span>
+      <div class="trust-chips">
+        <span class="trust-chip">Coaches y Mentores</span>
+        <span class="trust-chip">Consultores</span>
+        <span class="trust-chip">Agencias de Marketing</span>
+        <span class="trust-chip">Infoproductores</span>
+        <span class="trust-chip">Freelancers High Ticket</span>
+        <span class="trust-chip">Formadores Online</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN / PROBLEM -->
+<section id="pain">
+  <div class="container">
+    <div class="pain-grid">
+      <div>
+        <div class="rv">
+          <span class="tag" style="background:rgba(255,59,48,0.1);border-color:rgba(255,59,48,0.25);color:#FF7B73">El problema real</span>
+          <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-1px;margin:14px 0 24px;line-height:1.1">
+            ¿Cuánto dinero estás<br/><span class="fire-text">dejando ir cada mes</span><br/>por no tener sistema?
+          </h2>
+        </div>
+        <div class="pain-list">
+          <div class="pain-item rv rv1">
+            <div class="pain-x">✗</div>
+            <p class="pain-text"><strong>Dependes del boca a boca</strong> — y cuando para, tus ingresos también. No hay forma de controlar cuántos clientes llegan ni cuándo.</p>
+          </div>
+          <div class="pain-item rv rv2">
+            <div class="pain-x">✗</div>
+            <p class="pain-text"><strong>Persigues a prospectos</strong> que nunca compran. Horas de seguimientos manuales para personas que ni siquiera tienen presupuesto.</p>
+          </div>
+          <div class="pain-item rv rv3">
+            <div class="pain-x">✗</div>
+            <p class="pain-text"><strong>Publicas sin parar</strong> en redes sociales y obtienes likes, no clientes. El contenido consume tu tiempo pero no llena tu agenda.</p>
+          </div>
+          <div class="pain-item rv rv4">
+            <div class="pain-x">✗</div>
+            <p class="pain-text"><strong>Ingresos irregulares</strong> — meses buenos seguidos de meses en los que casi no facturas. No puedes planificar ni escalar.</p>
+          </div>
+        </div>
+      </div>
+      <div class="rv rv2">
+        <div class="pain-vs">
+          <p style="font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:18px">Sin Fiborti vs Con Fiborti</p>
+          <div class="vs-row"><span class="vs-bad">Ingresos impredecibles</span><span class="vs-sep">vs</span><span class="vs-good">Ingresos controlados</span></div>
+          <div class="vs-row"><span class="vs-bad">Persigues clientes</span><span class="vs-sep">vs</span><span class="vs-good">Clientes te buscan a ti</span></div>
+          <div class="vs-row"><span class="vs-bad">Depende del boca a boca</span><span class="vs-sep">vs</span><span class="vs-good">Sistema automático 24/7</span></div>
+          <div class="vs-row"><span class="vs-bad">Cualquier cliente</span><span class="vs-sep">vs</span><span class="vs-good">Solo clientes ideales</span></div>
+          <div class="vs-row"><span class="vs-bad">Sin tiempo libre</span><span class="vs-sep">vs</span><span class="vs-good">Tu agenda, tú decides</span></div>
+          <div class="vs-row"><span class="vs-bad">Crecer = más trabajo</span><span class="vs-sep">vs</span><span class="vs-good">Crecer = el sistema escala</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP 1 -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="strip-inner">
+      <p>Cada día sin sistema es <em>dinero que pierdes</em>. ¿Cuánto más vas a esperar?</p>
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire">
+        Cortar la hemorragia hoy →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section id="how">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Nuestro método</span>
+      <h2>¿Cómo logramos vender<br/><span class="fire-text">en automático?</span></h2>
+      <p>3 fases que convierten extraños en clientes de alto valor sin que tú tengas que mover un dedo en el proceso.</p>
+    </div>
+    <div class="how-cards rv">
+      <div class="how-card">
+        <div class="how-n">01</div>
+        <h3>Atracción cualificada<br/>— solo clientes ideales</h3>
+        <p>Construimos un sistema de captación con anuncios hipersegmentados y funnels optimizados que filtran el ruido y solo permiten pasar a personas con problema real, dinero para resolverlo y ganas de actuar.</p>
+        <ul class="how-bullets">
+          <li>Anuncios en Meta/Google con segmentación quirúrgica</li>
+          <li>Lead magnets que pre-cualifican antes de hablar</li>
+          <li>Landing pages con conversión del 35–45%</li>
+        </ul>
+      </div>
+      <div class="how-card">
+        <div class="how-n">02</div>
+        <h3>Nutrición automática<br/>— 24/7 sin descanso</h3>
+        <p>Secuencias inteligentes de emails, mensajes y retargeting que educan, generan confianza y empujan al prospecto hacia la compra mientras tú te dedicas a lo que sabes hacer.</p>
+        <ul class="how-bullets">
+          <li>Secuencias de email personalizadas por comportamiento</li>
+          <li>Follow-up automático por WhatsApp</li>
+          <li>Retargeting que recupera leads que se fueron</li>
+        </ul>
+      </div>
+      <div class="how-card">
+        <div class="how-n">03</div>
+        <h3>Cierre predecible<br/>— de llamada a pago</h3>
+        <p>Un proceso de cierre estructurado con scripts probados, manejo de objeciones integrado y agenda automática que lleva al prospecto desde el primer contacto hasta el pago con fricciones mínimas.</p>
+        <ul class="how-bullets">
+          <li>Scripts de venta optimizados para tu nicho</li>
+          <li>Manejo de las 7 objeciones más comunes</li>
+          <li>Integración directa con tu agenda Calendar</li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px" class="rv">
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire btn-lg">
+        Quiero este sistema para mi negocio →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Beneficios directos</span>
+      <h2>Lo que obtienes cuando<br/><span class="fire-text">empezamos a trabajar</span></h2>
+      <p>No vendemos expectativas. Aquí están los resultados concretos que nuestros clientes experimentan.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="bc rv rv1"><div class="bc-icon">📅</div><h3>Agenda llena en 30 días</h3><p>Los primeros prospectos cualificados llegan en las primeras 2 semanas de activar el sistema. Tu agenda se llena, no de curiosos, sino de personas listas para comprar.</p></div>
+      <div class="bc rv rv2"><div class="bc-icon">💰</div><h3>Ingresos 3x en 90 días</h3><p>Nuestros clientes triplican ingresos en 90 días en promedio. No es magia —es un sistema con métricas controladas y un embudo que convierte de forma predecible.</p></div>
+      <div class="bc rv rv3"><div class="bc-icon">🤖</div><h3>Ventas mientras duermes</h3><p>El sistema trabaja 24/7 captando, cualificando y nutriendo prospectos. Cuando abres el ordenador por la mañana, ya tienes reuniones agendadas.</p></div>
+      <div class="bc rv rv1"><div class="bc-icon">🎯</div><h3>Solo clientes que pagan</h3><p>Filtros inteligentes que eliminan los que solo quieren información gratuita. Solo llegan a tu agenda personas con presupuesto y urgencia real.</p></div>
+      <div class="bc rv rv2"><div class="bc-icon">⏱</div><h3>Recupera 20h a la semana</h3><p>Todo el seguimiento manual, las respuestas repetitivas y la gestión de prospectos pasan a ser automáticas. Tú cierras, el sistema hace el resto.</p></div>
+      <div class="bc rv rv3"><div class="bc-icon">📈</div><h3>Escala sin contratar</h3><p>El sistema escala con tu negocio. Quieres el doble de clientes, duplicamos el presupuesto de anuncios. No hay que contratar a nadie para crecer.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section id="proof-cards">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag tag-gold">Resultados verificados</span>
+      <h2>Números reales de<br/><span class="fire-text">clientes reales</span></h2>
+    </div>
+    <div class="pc-grid">
+      <div class="pc rv rv1">
+        <div class="stars-fire">★★★★★</div>
+        <p class="pc-q">"En 6 semanas pasé de 2 clientes al mes a tener la agenda completamente llena. Nunca imaginé que la captación de clientes podía ser tan predecible y controlada."</p>
+        <div class="pc-author">
+          <div class="pc-av">JR</div>
+          <div><div class="pc-name">Juan Rodríguez</div><div class="pc-role">Coach de Negocios · 3x ingresos</div></div>
+        </div>
+      </div>
+      <div class="pc rv rv2">
+        <div class="stars-fire">★★★★★</div>
+        <p class="pc-q">"Triplicamos los ingresos en 90 días. El sistema de seguimiento automático es brutal, trabaja solo mientras nosotros nos dedicamos a cerrar. Ojalá lo hubiera conocido antes."</p>
+        <div class="pc-author">
+          <div class="pc-av">MC</div>
+          <div><div class="pc-name">María Contreras</div><div class="pc-role">Consultora de Marketing · 18K€/mes</div></div>
+        </div>
+      </div>
+      <div class="pc rv rv3">
+        <div class="stars-fire">★★★★★</div>
+        <p class="pc-q">"Llevaba años intentando hacer funcionar mis redes. En 3 meses con Fiborti conseguí más clientes que en los 2 años anteriores juntos. El ROI es obsceno."</p>
+        <div class="pc-author">
+          <div class="pc-av">AL</div>
+          <div><div class="pc-name">Andrés López</div><div class="pc-role">Formador Online · +47 clientes</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP 2 -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="strip-inner">
+      <p>¿Listo para dejar de improvisar y tener un sistema que <em>funciona solo</em>?</p>
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-gold">
+        Hablar con el equipo →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- APPLY -->
+<section id="apply">
+  <div class="container">
+    <div class="apply-grid">
+      <div>
+        <div class="rv">
+          <span class="tag">Qué implementamos</span>
+          <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-1px;margin:14px 0 24px;line-height:1.1">
+            Todo lo que pondremos<br/>a trabajar en tu<br/><span class="fire-text">negocio desde el día 1</span>
+          </h2>
+        </div>
+        <div class="apply-items">
+          <div class="ai rv rv1"><div class="ai-ico">⚙️</div><div class="ai-t"><h4>CRM automatizado completo</h4><p>Pipelines, tareas automáticas y notificaciones para que ningún prospecto se pierda en el camino.</p></div></div>
+          <div class="ai rv rv2"><div class="ai-ico">📣</div><div class="ai-t"><h4>Campaña de adquisición pagada</h4><p>Diseño, lanzamiento y optimización de campañas en Meta y Google con creatividades y copy probados.</p></div></div>
+          <div class="ai rv rv3"><div class="ai-ico">📧</div><div class="ai-t"><h4>Secuencias de email marketing</h4><p>Mínimo 10 emails de bienvenida, nurturing y cierre escritos específicamente para tu audiencia.</p></div></div>
+          <div class="ai rv rv4"><div class="ai-ico">📱</div><div class="ai-t"><h4>Automatización WhatsApp</h4><p>Chatbot y secuencias que responden, califican y agendan citas sin intervención manual tuya.</p></div></div>
+          <div class="ai rv rv5"><div class="ai-ico">🎬</div><div class="ai-t"><h4>VSL y contenido estratégico</h4><p>Video de ventas y activos de contenido que pre-venden tus servicios antes de la llamada.</p></div></div>
+        </div>
+      </div>
+      <div class="apply-visual rv rv2">
+        <div class="av-title">Tu embudo en números</div>
+        <div class="av-sub">Así se ve el flujo de un cliente con sistema activo</div>
+        <div class="funnel-wrap">
+          <div class="fn fn1"><span>👁️ Tráfico cualificado</span><span class="fn-pct">100%</span></div>
+          <div class="fn fn2"><span>🎯 Leads capturados</span><span class="fn-pct">35–45%</span></div>
+          <div class="fn fn3"><span>📅 Llamadas agendadas</span><span class="fn-pct">15–25%</span></div>
+          <div class="fn fn4"><span>💰 Clientes cerrados</span><span class="fn-pct">30–50%</span></div>
+        </div>
+        <div class="funnel-example">
+          <div class="fe-label">Ejemplo real</div>
+          <div class="fe-num">1.000 visitas/mes</div>
+          <div class="fe-sub">→ 400 leads → 80 llamadas → <strong>25 clientes nuevos</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section id="cases">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag tag-gold">Casos de éxito</span>
+      <h2>Resultados reales.<br/><span class="fire-text">Números concretos.</span></h2>
+      <p>Estas no son proyecciones —son resultados documentados de clientes que implementaron el sistema.</p>
+    </div>
+    <div class="cases-grid">
+      <div class="cc rv rv1">
+        <div class="cc-thumb"><div class="cc-result">3x</div><div class="cc-metric">Ingresos en 90 días</div></div>
+        <div class="cc-body">
+          <div class="cc-niche">Coaching de Vida</div>
+          <h3>De 5K a 18K€/mes en solo 3 meses</h3>
+          <p>Coach con 2 años de trayectoria sin sistema de captación. Implementamos Meta Ads + email sequences. Resultado: ingresos triplicados en 90 días, con lista de espera.</p>
+        </div>
+      </div>
+      <div class="cc rv rv2">
+        <div class="cc-thumb"><div class="cc-result">+47</div><div class="cc-metric">Reuniones en 60 días</div></div>
+        <div class="cc-body">
+          <div class="cc-niche">Consultoría B2B</div>
+          <h3>47 llamadas con CFOs en 2 meses</h3>
+          <p>Consultor con agenda vacía. Sistema de outreach + LinkedIn + funnel de cualificación. 47 reuniones con decisores reales en 60 días. 14 clientes cerrados.</p>
+        </div>
+      </div>
+      <div class="cc rv rv3">
+        <div class="cc-thumb"><div class="cc-result">12K€</div><div class="cc-metric">Sin invertir en publicidad</div></div>
+        <div class="cc-body">
+          <div class="cc-niche">Infoproductos</div>
+          <h3>12K€ en lanzamiento con lista fría</h3>
+          <p>Infoproductor con lista de leads sin calentar. Diseñamos secuencia de lanzamiento de 10 emails. 12K€ generados sin un solo euro en anuncios pagados.</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px" class="rv">
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire btn-lg">
+        Quiero resultados como estos →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Referencias</span>
+      <h2>Lo que dicen quienes<br/><span class="fire-text">ya lo vivieron</span></h2>
+    </div>
+    <div class="t-grid">
+      <div class="tc hero-t rv">
+        <div class="tc-q">"</div>
+        <p class="tc-text">Antes de Fiborti perdía entre 15 y 20 horas semanales persiguiendo prospectos que no compraban. Ahora mi agenda se llena sola con personas que ya quieren trabajar conmigo —ya filtradas, ya cualificadas, ya listas. El cambio fue económico pero también personal: recuperé mi tiempo, mi energía y mi tranquilidad. Pasé de 8K a 28K€/mes en 4 meses y el sistema sigue funcionando sin que yo toque nada.</p>
+        <div class="tc-author">
+          <div class="tc-av">SP</div>
+          <div><div class="tc-name">Sara Pérez</div><div class="tc-role">Mentora de Negocios Online · Madrid</div></div>
+          <div class="tc-badge">+250% ingresos</div>
+        </div>
+      </div>
+      <div class="tc rv rv1">
+        <div class="tc-q">"</div>
+        <p class="tc-text">Llevo 3 meses con el sistema y ya no sé lo que es una semana sin llamadas. Tengo lista de espera por primera vez en 5 años. El ROI más alto que he tenido en mi negocio.</p>
+        <div class="tc-author">
+          <div class="tc-av">RG</div>
+          <div><div class="tc-name">Roberto García</div><div class="tc-role">Consultor Financiero</div></div>
+        </div>
+      </div>
+      <div class="tc rv rv2">
+        <div class="tc-q">"</div>
+        <p class="tc-text">Lo que más me sorprendió es que el equipo no solo implementa —te enseña las métricas. Ahora sé exactamente cuánto invertir para conseguir cada cliente nuevo.</p>
+        <div class="tc-author">
+          <div class="tc-av">LM</div>
+          <div><div class="tc-name">Laura Martínez</div><div class="tc-role">Coach de Liderazgo</div></div>
+        </div>
+      </div>
+      <div class="tc rv rv3">
+        <div class="tc-q">"</div>
+        <p class="tc-text">Invertí en publicidad 2 años sin resultados. Con Fiborti en 6 semanas recuperé toda la inversión. El problema nunca fue la publicidad —era que no tenía sistema.</p>
+        <div class="tc-author">
+          <div class="tc-av">DT</div>
+          <div><div class="tc-name">Diego Torres</div><div class="tc-role">Agencia de Social Media</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP 3 -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="strip-inner">
+      <p>Tu próximo caso de éxito <em>puede ser este mes</em>.</p>
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire">
+        Agendar estrategia gratuita →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON TABLE -->
+<section id="comparison">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Comparativa</span>
+      <h2>Fiborti vs.<br/><span class="fire-text">hacerlo tú solo</span></h2>
+      <p>La diferencia entre un sistema probado y seguir improvisando es más grande de lo que crees.</p>
+    </div>
+    <div class="rv" style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--cb)">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Aspecto</th>
+            <th>✅ Con Fiborti</th>
+            <th>❌ Sin Fiborti</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Tiempo hasta primeros resultados</td><td>2–4 semanas</td><td class="chk">6–12 meses (si llegan)</td></tr>
+          <tr><td>Captación de leads</td><td>Automatizada 24/7</td><td class="chk">Manual, cara a cara, referidos</td></tr>
+          <tr><td>Cualificación de prospectos</td><td>Sistema automático de filtros</td><td class="chk">Pierdes horas con personas que no compran</td></tr>
+          <tr><td>Seguimiento a prospectos</td><td>Secuencias automáticas</td><td class="chk">Seguimiento manual o no se hace</td></tr>
+          <tr><td>Previsibilidad de ingresos</td><td>Métricas controladas y escalables</td><td class="chk">Incertidumbre total mes a mes</td></tr>
+          <tr><td>Escalar el negocio</td><td>Ajustar presupuesto en anuncios</td><td class="chk">Contratar más personas = más costes</td></tr>
+          <tr><td>Tiempo de tu semana en ventas</td><td>Solo cierras, nada más</td><td class="chk">15–20h semanales en captación</td></tr>
+          <tr><td>Garantía de resultados</td><td>Por escrito, en el contrato</td><td class="chk">Ninguna</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 90-DAY ROADMAP -->
+<section id="roadmap">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Hoja de ruta</span>
+      <h2>Lo que pasa en tus<br/><span class="fire-text">primeros 90 días</span></h2>
+      <p>Un plan claro de lo que ocurre desde el momento en que empezamos a trabajar juntos.</p>
+    </div>
+    <div class="roadmap rv" style="max-width:700px;margin:0 auto">
+      <div class="rm-item">
+        <div class="rm-dot">1</div>
+        <div class="rm-content">
+          <div class="rm-week">Semana 1–2</div>
+          <h3>Auditoría y estrategia personalizada</h3>
+          <p>Analizamos tu negocio, oferta, mercado y competencia. Diseñamos la estrategia exacta para tu caso —no una plantilla genérica, sino un plan a medida.</p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot">2</div>
+        <div class="rm-content">
+          <div class="rm-week">Semana 2–4</div>
+          <h3>Construcción del sistema completo</h3>
+          <p>Creamos funnel, landing page, CRM, campañas publicitarias, secuencias de email y WhatsApp. Todo conectado y listo para activar.</p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot">3</div>
+        <div class="rm-content">
+          <div class="rm-week">Semana 4–6</div>
+          <h3>Lanzamiento y primeros leads</h3>
+          <p>Activamos las campañas. Los primeros prospectos cualificados empiezan a llegar a tu funnel y a agendar llamadas en tu calendario.</p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot">4</div>
+        <div class="rm-content">
+          <div class="rm-week">Semana 6–12</div>
+          <h3>Optimización y escala</h3>
+          <p>Analizamos datos reales del sistema, optimizamos lo que funciona, eliminamos lo que no. Escalamos presupuesto y volumen de leads de forma controlada.</p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot">🏆</div>
+        <div class="rm-content">
+          <div class="rm-week">Día 90</div>
+          <h3>Agenda llena. Sistema funcionando solo.</h3>
+          <p>Tu negocio tiene un sistema autónomo de captación de clientes. Tú solo te dedicas a cerrar y entregar. El sistema trabaja por ti.</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:56px" class="rv">
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire btn-lg">
+        Empezar mi transformación →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section id="deliverables">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Entregables</span>
+      <h2>Todo lo que recibes<br/><span class="fire-text">desde el primer día</span></h2>
+      <p>Un programa completo con todo lo necesario para tener una máquina de clientes funcionando en tu negocio.</p>
+    </div>
+    <div class="del-grid">
+      <div class="di rv rv1"><div class="di-chk">✓</div><div class="di-t"><h4>Auditoría completa de negocio</h4><p>Analizamos tu oferta, mercado y situación actual para diseñar la estrategia más efectiva.</p></div></div>
+      <div class="di rv rv2"><div class="di-chk">✓</div><div class="di-t"><h4>Funnel de captación a medida</h4><p>Landing page, formularios, páginas de confirmación y flujo completo de entrada de leads.</p></div></div>
+      <div class="di rv rv3"><div class="di-chk">✓</div><div class="di-t"><h4>Campañas publicitarias activas</h4><p>Creación, lanzamiento y optimización de campañas en Meta Ads y/o Google Ads.</p></div></div>
+      <div class="di rv rv4"><div class="di-chk">✓</div><div class="di-t"><h4>CRM configurado y automatizado</h4><p>Pipelines, tareas automáticas, recordatorios y gestión completa de tu base de prospectos.</p></div></div>
+      <div class="di rv rv1"><div class="di-chk">✓</div><div class="di-t"><h4>10+ emails de nurturing escritos</h4><p>Secuencia completa de bienvenida, educación y cierre para convertir leads en clientes.</p></div></div>
+      <div class="di rv rv2"><div class="di-chk">✓</div><div class="di-t"><h4>Automatización WhatsApp activa</h4><p>Chatbot y secuencias automáticas de seguimiento, recordatorio y cierre por WhatsApp.</p></div></div>
+      <div class="di rv rv3"><div class="di-chk">✓</div><div class="di-t"><h4>Scripts de venta y objeciones</h4><p>Guiones probados para llamadas con las respuestas a las principales objeciones de tu mercado.</p></div></div>
+      <div class="di rv rv4"><div class="di-chk">✓</div><div class="di-t"><h4>Dashboard de métricas en tiempo real</h4><p>Panel de control con KPIs clave para que sepas exactamente qué ocurre en tu negocio.</p></div></div>
+      <div class="di rv rv1"><div class="di-chk">✓</div><div class="di-t"><h4>Sesiones mensuales de optimización</h4><p>Revisiones estratégicas cada mes para asegurarnos de que el sistema siga escalando.</p></div></div>
+      <div class="di rv rv2"><div class="di-chk">✓</div><div class="di-t"><h4>Soporte directo 1-a-1</h4><p>Acceso al equipo de Fiborti para resolver dudas y hacer ajustes en tiempo real cuando los necesites.</p></div></div>
+    </div>
+    <div style="text-align:center;margin-top:48px" class="rv">
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire btn-lg">
+        Quiero todos estos entregables →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section id="guarantee">
+  <div class="container">
+    <div class="guarantee-box rv">
+      <div class="guarantee-seal">
+        <span class="seal-icon">🛡️</span>
+        <span class="seal-text">Garantía de<br/>resultados</span>
+      </div>
+      <div class="guarantee-content">
+        <h3>Si no ves resultados en 90 días, seguimos trabajando gratis</h3>
+        <p>Tan seguros estamos de que nuestro sistema funciona que lo ponemos <strong>por escrito en el contrato</strong>. Si en los primeros 90 días no consigues al menos el doble de lo que invertiste en clientes nuevos, el equipo de Fiborti sigue trabajando contigo <strong>sin ningún coste adicional</strong> hasta que lo logres. Sin letra pequeña. Sin excusas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOT FOR YOU -->
+<section id="not-for-you">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Honestidad antes que nada</span>
+      <h2>¿Es Fiborti <span class="fire-text">para ti?</span></h2>
+      <p>No trabajamos con todo el mundo. La honestidad nos permite garantizar resultados.</p>
+    </div>
+    <div class="nfy-grid rv">
+      <div class="nfy-col bad">
+        <h3><span style="font-size:22px">❌</span> Fiborti NO es para ti si…</h3>
+        <ul class="nfy-list">
+          <li><span class="mk">✗</span> Buscas resultados de la noche a la mañana sin poner de tu parte</li>
+          <li><span class="mk">✗</span> No tienes una oferta definida ni un perfil de cliente claro</li>
+          <li><span class="mk">✗</span> No estás dispuesto a invertir en publicidad para escalar</li>
+          <li><span class="mk">✗</span> Quieres un servicio de "set it and forget it" sin tu participación</li>
+          <li><span class="mk">✗</span> No tienes tiempo para hacer las llamadas de cierre</li>
+        </ul>
+      </div>
+      <div class="nfy-col good">
+        <h3><span style="font-size:22px">✅</span> Fiborti SÍ es para ti si…</h3>
+        <ul class="nfy-list">
+          <li><span class="mk">✓</span> Tienes un servicio demostrado y quieres más clientes para él</li>
+          <li><span class="mk">✓</span> Estás dispuesto a invertir para crecer de forma predecible</li>
+          <li><span class="mk">✓</span> Quieres un sistema que trabaje aunque tú no estés</li>
+          <li><span class="mk">✓</span> Estás cansado de la incertidumbre y quieres control real</li>
+          <li><span class="mk">✓</span> Puedes comprometerte 90 días con el proceso</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="sh rv">
+      <span class="tag">Preguntas frecuentes</span>
+      <h2>Lo que todos<br/><span class="fire-text">quieren saber</span></h2>
+    </div>
+    <div class="faq-grid rv">
+      <div class="faq-item">
+        <button class="faq-q">¿En cuánto tiempo veo resultados? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Los primeros prospectos cualificados suelen llegar en las primeras 2–3 semanas. Las primeras llamadas agendadas, en semana 3–4. Para el mes 3, el sistema ya funciona de forma fluida y predecible.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Qué pasa si no funciona? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Tenemos garantía por escrito. Si en 90 días no recuperas al menos el doble de tu inversión en clientes nuevos, seguimos trabajando contigo gratis hasta que lo consigas. Sin letra pequeña.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Necesito experiencia en marketing? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">No. Nosotros hacemos todo —estrategia, anuncios, emails, automatizaciones, CRM. Tú solo necesitas estar disponible para las llamadas de cierre y seguir el proceso que te indicamos.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Funciona para mi nicho específico? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Si tienes un servicio de alto valor y un cliente ideal definido, el sistema funciona. Hemos trabajado con coaches, consultores, formadores, agencias, freelancers y más. La llamada diagnóstica nos permite confirmarlo.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Cuánto hay que invertir en publicidad? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Depende de tus objetivos y mercado. En la llamada de diagnóstico calculamos el presupuesto mínimo rentable para tu caso. La mayoría de nuestros clientes empieza con 300–1.000€/mes en anuncios.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Cuánto tiempo me lleva al día? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">La primera semana es más intensa por la puesta en marcha. Después, tu único trabajo es hacer las llamadas de cierre que el sistema agenda para ti. El tiempo de captación es básicamente cero.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="final">
+  <div class="blob" style="width:600px;height:600px;background:rgba(255,82,0,0.1);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="container">
+    <div class="rv">
+      <span class="tag tag-gold">
+        <span class="blink">🔴</span> Solo 3 plazas este mes
+      </span>
+    </div>
+    <h2 class="final-h rv rv1">
+      Tu agenda llena<br/>
+      <span class="fire-text">empieza en esta llamada</span>
+    </h2>
+    <p class="final-sub rv rv2">
+      30 minutos gratuitos. Analizamos tu negocio, identificamos exactamente qué está frenando tu crecimiento y diseñamos juntos el plan de los próximos 90 días.
+    </p>
+    <div class="final-actions rv rv3">
+      <a href="https://calendly.com/fiborti" target="_blank" rel="noopener" class="btn btn-fire btn-xl">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Agendar mi llamada estratégica gratis →
+      </a>
+    </div>
+    <div class="final-micro rv rv4">
+      <span>🛡️ Garantía de resultados por escrito</span>
+      <span>⏱ Solo 30 minutos</span>
+      <span>🔒 Cero compromiso de compra</span>
+      <span>📅 Plazas limitadas</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="f-logo">fiborti.</div>
+    <p>© 2025 Fiborti. Todos los derechos reservados.</p>
+    <p style="margin-top:6px">Sistemas de ventas automáticos para coaches, consultores y agencias.</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+  // Video play
+  const playBtn = document.getElementById('playBtn');
+  const iframe = document.getElementById('ytIframe');
+  const caption = document.querySelector('.video-caption');
+  if (playBtn && iframe) {
+    playBtn.addEventListener('click', () => {
+      iframe.src = iframe.src + '&autoplay=1';
+      iframe.style.display = 'block';
+      playBtn.style.display = 'none';
+      if (caption) caption.style.display = 'none';
+    });
+  }
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Smooth anchor scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
