@@ -1,0 +1,71 @@
+name: FTP sync (graduación)
+
+# Sincroniza el sitio de graduación con el servidor por FTP.
+#  - direction = pull  -> descarga del servidor al repo (carpeta graduacion/)
+#  - direction = push  -> sube del repo al servidor
+# También sube automáticamente cuando cambian archivos en graduacion/.
+
+on:
+  workflow_dispatch:
+    inputs:
+      direction:
+        description: "pull (servidor -> repo) o push (repo -> servidor)"
+        type: choice
+        options: [pull, push]
+        default: pull
+      remote_dir:
+        description: "Carpeta remota (la cuenta FTP suele estar limitada a / = la carpeta claude)"
+        type: string
+        default: "/"
+  push:
+    branches: [claude/quirky-johnson-8apw3n]
+    paths:
+      - "graduacion/**"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      REMOTE_DIR: ${{ github.event.inputs.remote_dir || '/' }}
+      LOCAL_DIR: graduacion
+      INCLUDES: "--include-glob=*.html --include-glob=*.htm --include-glob=*.css --include-glob=*.js --include-glob=*.jpg --include-glob=*.jpeg --include-glob=*.png --include-glob=*.webp --include-glob=*.gif --include-glob=*.svg --include-glob=*.ico --include-glob=*.woff --include-glob=*.woff2"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Pull (servidor -> repo)
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.direction == 'pull' }}
+        run: |
+          mkdir -p "$LOCAL_DIR"
+          lftp -u "$FTP_USERNAME,$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 2; set net:timeout 25; mirror --verbose --no-perms $INCLUDES \"$REMOTE_DIR\" \"$LOCAL_DIR\"; bye"
+          echo "Archivos descargados:" && find "$LOCAL_DIR" -type f | sort
+
+      - name: Commit pulled files
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.direction == 'pull' }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$LOCAL_DIR"
+          if git diff --cached --quiet; then
+            echo "Sin cambios que commitear."
+          else
+            git commit -m "chore: sync sitio de graduación desde FTP"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
+
+      - name: Deploy (repo -> servidor)
+        if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.direction == 'push') }}
+        run: |
+          if [ ! -d "$LOCAL_DIR" ]; then
+            echo "No existe la carpeta $LOCAL_DIR; nada que subir."; exit 1
+          fi
+          lftp -u "$FTP_USERNAME,$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 2; set net:timeout 25; mirror -R --verbose --no-perms \"$LOCAL_DIR\" \"$REMOTE_DIR\"; bye"
