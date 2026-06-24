@@ -69,3 +69,11 @@ jobs:
             echo "No existe la carpeta $LOCAL_DIR; nada que subir."; exit 1
           fi
           lftp -u "$FTP_USERNAME,$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 2; set net:timeout 25; mirror -R --verbose --no-perms \"$LOCAL_DIR\" \"$REMOTE_DIR\"; bye"
+
+      # Prueba: subir también un nivel arriba (raíz web) -> URL sin /claude/.
+      # No falla el job si el FTP está bloqueado a la carpeta claude.
+      - name: Probe deploy to web root (/graduacion)
+        if: ${{ github.event_name == 'push' }}
+        continue-on-error: true
+        run: |
+          lftp -u "$FTP_USERNAME,$FTP_PASSWORD" "$FTP_SERVER" -e "set ftp:ssl-allow true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 2; set net:timeout 25; mkdir -p -f ../graduacion; mirror -R --verbose --no-perms $INCLUDES \"$LOCAL_DIR\" \"../graduacion\"; cls -l ../graduacion; bye"
