@@ -5,22 +5,9 @@
   <title>Bundled Page</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: radial-gradient(circle at 50% 34%, #6E1A33, #46101F 72%); display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    body { background: #5C1528; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
     #__bundler_loading { display: none; }
-    #__bundler_thumbnail { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 34%, #6E1A33, #46101F 72%); z-index: 9999; }
-    .dc-splash { display: flex; flex-direction: column; align-items: center; animation: dc-fade .7s ease both; }
-    .dc-ring { width: 74px; height: 74px; border-radius: 50%; border: 2px solid rgba(201,168,76,.18); border-top-color: #E8C766; animation: dc-spin 1s linear infinite; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
-    .dc-ring::after { content: ""; width: 11px; height: 11px; background: #E8C766; box-shadow: 0 0 14px rgba(232,199,102,.7); animation: dc-pulse 1.4s ease-in-out infinite; }
-    .dc-title { font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; letter-spacing: 7px; color: #F0D080; }
-    .dc-sub { margin-top: 12px; font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,.55); }
-    .dc-dots { margin-top: 26px; display: flex; gap: 7px; }
-    .dc-dots span { width: 6px; height: 6px; border-radius: 50%; background: #C9A84C; animation: dc-blink 1.2s ease-in-out infinite; }
-    .dc-dots span:nth-child(2) { animation-delay: .2s; }
-    .dc-dots span:nth-child(3) { animation-delay: .4s; }
-    @keyframes dc-spin { to { transform: rotate(360deg); } }
-    @keyframes dc-pulse { 0%,100% { opacity: .55; transform: rotate(45deg) scale(.85); } 50% { opacity: 1; transform: rotate(45deg) scale(1.15); } }
-    @keyframes dc-blink { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
-    @keyframes dc-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    #__bundler_thumbnail { display: none; }
     #__bundler_placeholder { color: #999; font-size: 14px; }
   </style>
   <noscript>
@@ -31,7 +18,7 @@
   </noscript>
 </head>
 <body>
-  <div id="__bundler_thumbnail"><div class="dc-splash"><div class="dc-ring"></div><p class="dc-title">CBTIS 261</p><p class="dc-sub">Invitación de Graduación</p><div class="dc-dots"><span></span><span></span><span></span></div></div></div>
+  <div id="__bundler_thumbnail"></div>
   <div id="__bundler_loading">Unpacking...</div>
 
   <script>
