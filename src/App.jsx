@@ -16,6 +16,11 @@ import {
 
 // ---------- Config ----------
 const ADMIN_PIN = "7373"; // PIN maestro de administrador (Fernando)
+
+// 👇 Pega aquí el link de la quiniela de Liga MX. Aparece como botón cuando se
+// revela al campeón del Mundial, para invitar a la banda a seguir jugando.
+const LIGA_MX_JOIN_URL = "";
+
 const ROUND_DEFS = [
   { key: "r16", label: "Dieciseisavos", points: 1, slots: 16 },
   { key: "r8", label: "Octavos", points: 2, slots: 8 },
@@ -67,6 +72,66 @@ async function safeSet(key, value, shared) {
   } catch {
     return false;
   }
+}
+
+// ---------- Celebración de campeón ----------
+const CONFETTI_COLORS = ["#34d399", "#fbbf24", "#60a5fa", "#f472b6", "#a78bfa", "#f87171"];
+
+function ChampionCelebration({ name, joinUrl }) {
+  const pieces = Array.from({ length: 44 });
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-amber-400/40 bg-gradient-to-b from-amber-500/15 via-neutral-900 to-neutral-900 p-6 text-center mb-4">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        {pieces.map((_, i) => (
+          <span
+            key={i}
+            className="confetti-piece"
+            style={{
+              left: `${(i / pieces.length) * 100}%`,
+              background: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+              animationDelay: `${(i % 11) * 0.28}s`,
+              animationDuration: `${2.6 + (i % 5) * 0.5}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative">
+        <div className="champion-trophy mx-auto mb-2 w-fit">
+          <Trophy className="w-14 h-14 text-amber-400 drop-shadow-[0_0_14px_rgba(251,191,36,0.6)]" />
+        </div>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-amber-300/80">
+          Campeón del Mundial
+        </p>
+        <h2 className="champion-name text-3xl font-extrabold mt-1 break-words">{name}</h2>
+        <p className="text-sm text-neutral-400 mt-1 mb-5">¡Se acabó el torneo! 🎉🏆</p>
+
+        <div className="border-t border-neutral-800 pt-4">
+          <p className="text-sm text-neutral-300 mb-3">
+            ¿Le seguimos? Únete al grupo de la <span className="font-semibold">Quiniela de Liga MX</span>.
+          </p>
+          <a
+            href={joinUrl || "#"}
+            target={joinUrl ? "_blank" : undefined}
+            rel="noopener noreferrer"
+            className={`inline-flex items-center justify-center gap-2 w-full font-semibold rounded-lg py-2.5 transition-colors ${
+              joinUrl
+                ? "bg-emerald-500 hover:bg-emerald-400 text-neutral-950"
+                : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+            }`}
+            onClick={(e) => !joinUrl && e.preventDefault()}
+          >
+            Unirme a la Quiniela de Liga MX →
+          </a>
+          {!joinUrl && (
+            <p className="text-[11px] text-neutral-600 mt-2">
+              (Configura el link en <code>LIGA_MX_JOIN_URL</code>.)
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function QuinielaApp() {
@@ -403,14 +468,14 @@ export default function QuinielaApp() {
                           value={m.teamA}
                           onChange={(e) => updateMatchField(rd.key, m.id, "teamA", e.target.value)}
                           placeholder="Equipo A"
-                          className="flex-1 bg-neutral-900 border border-neutral-700 rounded px-2 py-1.5 text-sm"
+                          className="flex-1 min-w-0 bg-neutral-900 border border-neutral-700 rounded px-2 py-1.5 text-sm"
                         />
                         <span className="text-neutral-500 text-xs">vs</span>
                         <input
                           value={m.teamB}
                           onChange={(e) => updateMatchField(rd.key, m.id, "teamB", e.target.value)}
                           placeholder="Equipo B"
-                          className="flex-1 bg-neutral-900 border border-neutral-700 rounded px-2 py-1.5 text-sm"
+                          className="flex-1 min-w-0 bg-neutral-900 border border-neutral-700 rounded px-2 py-1.5 text-sm"
                         />
                         <button
                           onClick={() => removeMatchSlot(rd.key, m.id)}
@@ -494,6 +559,13 @@ export default function QuinielaApp() {
   const roundDef = ROUND_DEFS.find((r) => r.key === currentRoundKey);
   const canPick = round.status === "open";
 
+  // Campeón: cuando la Final (r1) está revelada y ya tiene resultado.
+  const finalRound = tournament.rounds.r1;
+  const champion =
+    finalRound && finalRound.status === "revealed" && finalRound.matches[0]?.result
+      ? finalRound.matches[0].result
+      : null;
+
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       <header className="border-b border-neutral-800 px-4 py-3 flex items-center justify-between sticky top-0 bg-neutral-950/95 backdrop-blur z-10">
@@ -536,6 +608,8 @@ export default function QuinielaApp() {
             {saveStatus}
           </div>
         )}
+
+        {champion && <ChampionCelebration name={champion} joinUrl={LIGA_MX_JOIN_URL} />}
 
         {activeTab === "picks" && (
           <div className="space-y-4">
@@ -606,7 +680,7 @@ export default function QuinielaApp() {
                                 key={team}
                                 disabled={!canPick}
                                 onClick={() => setPick(session.name, currentRoundKey, m.id, { winner: team })}
-                                className={`rounded-lg px-3 py-2.5 text-sm font-medium border transition-colors ${
+                                className={`min-w-0 break-words rounded-lg px-3 py-2.5 text-sm font-medium border transition-colors ${
                                   selected
                                     ? "bg-emerald-500 text-neutral-950 border-emerald-500"
                                     : "bg-neutral-800 text-neutral-200 border-neutral-700 hover:border-neutral-600"
@@ -634,7 +708,7 @@ export default function QuinielaApp() {
                                   onClick={() =>
                                     setPick(session.name, currentRoundKey, m.id, { method: meth.key })
                                   }
-                                  className={`rounded-lg px-2 py-1.5 text-xs border transition-colors ${
+                                  className={`min-w-0 whitespace-normal leading-tight rounded-lg px-2 py-1.5 text-xs border transition-colors ${
                                     selected
                                       ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/50"
                                       : "bg-neutral-800 text-neutral-300 border-neutral-700 hover:border-neutral-600"

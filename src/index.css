@@ -8,9 +8,97 @@ body,
   height: 100%;
 }
 
+html,
+body {
+  /* neutral-950: evita el "fondo blanco" que asoma al hacer overscroll o si
+     algo se desborda horizontalmente en mobile */
+  background-color: #0a0a0a;
+  /* corta cualquier desbordamiento lateral accidental en pantallas chicas */
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
+  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Celebración de campeón (Final revelada) ---------- */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-140%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(240%) rotate(720deg);
+    opacity: 0.9;
+  }
+}
+
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 13px;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes champion-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes trophy-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.champion-trophy {
+  animation: champion-pop 0.8s ease-out both,
+    trophy-bounce 2s ease-in-out 0.8s infinite;
+}
+
+@keyframes champion-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.champion-name {
+  background: linear-gradient(90deg, #f59e0b, #fde68a, #f59e0b);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: champion-shine 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-piece,
+  .champion-trophy,
+  .champion-name {
+    animation: none !important;
+  }
 }
