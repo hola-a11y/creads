@@ -77,8 +77,14 @@ async function safeSet(key, value, shared) {
 // ---------- Celebración de campeón ----------
 const CONFETTI_COLORS = ["#34d399", "#fbbf24", "#60a5fa", "#f472b6", "#a78bfa", "#f87171"];
 
-function ChampionCelebration({ name, joinUrl }) {
+function ChampionCelebration({ name, joinUrl, top = [] }) {
   const pieces = Array.from({ length: 44 });
+  const medals = ["🥇", "🥈", "🥉"];
+  const podiumStyles = [
+    "bg-amber-400/10 border-amber-400/40",
+    "bg-neutral-400/10 border-neutral-500/40",
+    "bg-orange-700/15 border-orange-600/40",
+  ];
   return (
     <div className="relative overflow-hidden rounded-2xl border border-amber-400/40 bg-gradient-to-b from-amber-500/15 via-neutral-900 to-neutral-900 p-6 text-center mb-4">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
@@ -106,7 +112,29 @@ function ChampionCelebration({ name, joinUrl }) {
         <h2 className="champion-name text-3xl font-extrabold mt-1 break-words">{name}</h2>
         <p className="text-sm text-neutral-400 mt-1 mb-5">¡Se acabó el torneo! 🎉🏆</p>
 
-        <div className="border-t border-neutral-800 pt-4">
+        {top.length > 0 && (
+          <div className="border-t border-neutral-800 pt-4 mb-1 text-left">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-neutral-400 mb-3 text-center">
+              Top 3 de la quiniela
+            </p>
+            <div className="space-y-2">
+              {top.map((p, i) => (
+                <div
+                  key={p.name}
+                  className={`flex items-center justify-between rounded-lg border px-3 py-2 ${podiumStyles[i] || "border-neutral-800"}`}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-lg leading-none">{medals[i] || `${i + 1}.`}</span>
+                    <span className="text-sm font-semibold truncate">{p.name}</span>
+                  </div>
+                  <span className="text-sm font-bold text-emerald-400 shrink-0">{p.total} pts</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="border-t border-neutral-800 pt-4 mt-4">
           <p className="text-sm text-neutral-300 mb-3">
             ¿Le seguimos? Únete al grupo de la <span className="font-semibold">Quiniela de Liga MX</span>.
           </p>
@@ -609,7 +637,13 @@ export default function QuinielaApp() {
           </div>
         )}
 
-        {champion && <ChampionCelebration name={champion} joinUrl={LIGA_MX_JOIN_URL} />}
+        {champion && (
+          <ChampionCelebration
+            name={champion}
+            joinUrl={LIGA_MX_JOIN_URL}
+            top={standings.slice(0, 3)}
+          />
+        )}
 
         {activeTab === "picks" && (
           <div className="space-y-4">
