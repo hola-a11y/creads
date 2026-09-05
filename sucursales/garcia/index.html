@@ -346,9 +346,9 @@
 <script>
 /* ═══════════════════════════════════════════════════════════
    CONFIGURACIÓN
-   1) WEBHOOK_URL: pega aquí la URL del Inbound Webhook de GHL
-      (GoHighLevel → Automation → Workflow → Trigger "Inbound Webhook").
-      También se puede sobreescribir con ?webhook=<url> en el navegador.
+   1) WEBHOOK_URL: webhook de n8n que recibe la inspección y la carga en GHL
+      (crea el contacto y la oportunidad en el embudo de la sucursal).
+      Se puede sobreescribir con ?webhook=<url> para pruebas.
    2) PRECIOS: edita los montos (MXN) de cada servicio.
    ═══════════════════════════════════════════════════════════ */
 const ICON = {
@@ -361,7 +361,7 @@ const ICON = {
 /* Sucursal de esta página. Cada subdominio publica su propio archivo. */
 const SUCURSAL = { nombre: "García", slug: "garcia", codigo: "GAR" };
 
-const WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/REEMPLAZAR";
+const WEBHOOK_URL = "https://n8n.srv1431536.hstgr.cloud/webhook/fts-inspeccion";
 
 const REVISION = [
   { id: "birlo",   label: "Birlo de seguridad",     glyph: ICON.tuerca },
